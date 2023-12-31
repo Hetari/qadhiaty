@@ -6,16 +6,22 @@
 .green-blur,
 .red-blur {
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(100px);
     z-index: -50;
+
     /* background: radial-gradient(circle at center, #358853 0, #ffffff00, #ffffff00 100%); */
 }
 
 .green-blur {
     background-color: #358853;
+    width: 100px;
+    height: 100px;
+    transform: translateX(25%);
 }
 
 .red-blur {
     background-color: #b90f18;
-    filter: blur(150px);
+    width: 500px;
+    height: 500px;
+    filter: blur(70px);
 }
