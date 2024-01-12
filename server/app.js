@@ -37,8 +37,16 @@ app.post("/:barcode", async (req, res) => {
     const product = response.data.product;
 
     if (product) {
-      const brandName = product.brands.split(",");
+      if (!product.brands) {
+        return res.status(200).json({ barcode: true, buy: true });
+      }
+
+      if (!product.countries) {
+        return res.status(200).json({ barcode: true, buy: true });
+      }
+
       const brandCountries = product.countries.split(",");
+      const brandName = product.brands.split(",");
 
       const brandNameArray = brandName
         .map((name) => {
