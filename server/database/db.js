@@ -34,6 +34,22 @@ const getProductById = (id) => {
   });
 };
 
+const getCountryByName = (name) => {
+  return new Promise((resolve, reject) => {
+    db.query(
+      "SELECT * FROM countries WHERE name LIKE ?",
+      [`%${name}%`],
+      (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      }
+    );
+  });
+};
+
 const getProductByName = (name) => {
   return new Promise((resolve, reject) => {
     db.query(
@@ -55,4 +71,5 @@ module.exports = {
   getAllProducts,
   getProductById,
   getProductByName,
+  getCountryByName,
 };

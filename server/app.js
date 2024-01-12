@@ -6,6 +6,7 @@ const {
   getAllProducts,
   getProductById,
   getProductByName,
+  getCountryByName,
 } = require("./database/db.js");
 // const client = new OFF();
 const app = express();
@@ -37,6 +38,8 @@ app.post("/:barcode", async (req, res) => {
 
     if (product) {
       const brandName = product.brands.split(",");
+      const brandCountries = product.countries.split(",");
+
       const brandNameArray = brandName
         .map((name) => {
           let n = name.trim().toLowerCase();
@@ -45,23 +48,50 @@ app.post("/:barcode", async (req, res) => {
         })
         .flat();
 
+      const brandCountriesArray = brandCountries
+        .map((country) => {
+          let c = country.trim().toLowerCase();
+          c = c.split(" ");
+          return c;
+        })
+        .flat();
+
       let result = null;
       for (const name of brandNameArray) {
         result = await getProductByName(name.toLowerCase());
         if (result) break;
       }
-      // if (!result) {
-      //   //TODO: check the country
-      // }
-      res.status(200).json({});
+      if (!result) {
+        //TODO: check the country
+        for (const name of brandCountriesArray) {
+          result = await getCountryByName(name.toLowerCase());
+          if (result) break;
+        }
+      }
+
+      if (!result)
+        res.status(200).json({
+          barcode: true,
+          error: "Product not found or data is incomplete.",
+          buy: true,
+        });
+
+      res.status(200).json({
+        barcode: true,
+        buy: true,
+        buy: false,
+      });
     } else {
       res.status(404).json({
         barcode: true,
         error: "Product not found or data is incomplete.",
+        buy: null,
       });
     }
   } catch (error) {
-    res.status(500).json({ barcode: true, error: "Internal server error" });
+    res
+      .status(500)
+      .json({ barcode: true, error: "Internal server error", buy: null });
   }
 });
 
