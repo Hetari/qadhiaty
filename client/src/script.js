@@ -59,9 +59,45 @@ form.addEventListener("submit", function (event) {
   })
     .then(function (response) {
       if (response.ok) {
-        console.log("Form data sent successfully!");
+        form.reset();
+        return response.json();
       } else {
-        console.error("Error sending form data to the backend.");
+        throw new Error("Error sending data to the server.");
+      }
+    })
+    .then(function (result) {
+      if (result.error) {
+        Swal.fire({
+          title: "Error!",
+          text: result.error,
+          icon: "error",
+          confirmButtonText: "Close",
+        });
+        return;
+      }
+      if (result.barcode) {
+        if (result.buy) {
+          Swal.fire({
+            title: "Success!",
+            text: "You can buy this product!",
+            icon: "success",
+            confirmButtonText: "Close",
+          });
+        } else {
+          Swal.fire({
+            title: "Error!",
+            text: "You can't buy this product!",
+            icon: "error",
+            confirmButtonText: "Close",
+          });
+        }
+      } else {
+        Swal.fire({
+          title: "I don't know!",
+          text: "Product not found in our database!",
+          icon: "info",
+          confirmButtonText: "Close",
+        });
       }
     })
     .catch(function (error) {

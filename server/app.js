@@ -62,7 +62,6 @@ app.post("/:barcode", async (req, res) => {
         if (result) break;
       }
       if (!result) {
-        //TODO: check the country
         for (const name of brandCountriesArray) {
           result = await getCountryByName(name.toLowerCase());
           if (result) break;
@@ -72,13 +71,11 @@ app.post("/:barcode", async (req, res) => {
       if (!result)
         res.status(200).json({
           barcode: true,
-          error: "Product not found or data is incomplete.",
           buy: true,
         });
 
       res.status(200).json({
         barcode: true,
-        buy: true,
         buy: false,
       });
     } else {
