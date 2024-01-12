@@ -1,4 +1,0 @@
-/* npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
